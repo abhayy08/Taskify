@@ -1,11 +1,11 @@
-package com.abhay.taskflow.features.feature_note.presentation.notes
+package com.abhay.taskify.features.feature_note.presentation.notes
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abhay.taskflow.features.feature_note.domain.model.Note
-import com.abhay.taskflow.features.feature_note.domain.use_case.NotesUseCases
+import com.abhay.taskify.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.use_cases.NotesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn

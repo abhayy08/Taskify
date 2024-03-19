@@ -1,4 +1,4 @@
-package com.abhay.taskflow.features.feature_note.domain.model
+package com.abhay.taskify.features.feature_note.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

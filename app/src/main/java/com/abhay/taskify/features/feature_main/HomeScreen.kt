@@ -1,11 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.abhay.taskflow.features.feature_main
+package com.abhay.taskify.features.feature_main
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -41,8 +38,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.abhay.taskflow.features.feature_main.navgraphs.HomeNavGraph
-import com.abhay.taskflow.ui.theme.TaskFlowTheme
+import com.abhay.taskify.features.feature_main.navgraphs.HomeNavGraph
+import com.abhay.taskify.ui.theme.TaskifyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -149,7 +146,6 @@ fun BottomAppBar(
             }
         }
     }
-
 }
 
 
@@ -184,7 +180,7 @@ fun RowScope.NavItem(
 @Preview
 @Composable
 fun MainPreview() {
-    TaskFlowTheme {
+    TaskifyTheme {
 //        HomeScreen()
     }
 

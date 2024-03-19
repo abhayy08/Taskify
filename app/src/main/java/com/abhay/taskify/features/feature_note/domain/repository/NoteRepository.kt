@@ -1,6 +1,6 @@
-package com.abhay.taskflow.features.feature_note.domain.repository
+package com.abhay.taskify.features.feature_note.domain.repository
 
-import com.abhay.taskflow.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {

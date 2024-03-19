@@ -1,4 +1,4 @@
-package com.abhay.taskflow.features.feature_main
+package com.abhay.taskify.features.feature_main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EditNote

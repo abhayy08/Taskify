@@ -1,4 +1,4 @@
-package com.abhay.taskflow.features.feature_note.presentation.add_edit_notes
+package com.abhay.taskify.features.feature_note.presentation.add_edit_notes_screen
 
 data class NoteTextFieldState(
     val text: String = "",

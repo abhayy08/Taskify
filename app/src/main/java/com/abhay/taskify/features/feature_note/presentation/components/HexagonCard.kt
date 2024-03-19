@@ -1,4 +1,4 @@
-package com.abhay.taskflow.features.feature_note.presentation.components
+package com.abhay.taskify.features.feature_note.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.abhay.taskflow.ui.theme.TaskFlowTheme
+import com.abhay.taskify.ui.theme.TaskifyTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -113,7 +113,7 @@ fun HexagonCard(
 @Preview
 @Composable
 fun NoteItemPrev() {
-    TaskFlowTheme {
+    TaskifyTheme {
         HexagonCard(
             sides = 6, rotation = 0f,
             modifier = Modifier

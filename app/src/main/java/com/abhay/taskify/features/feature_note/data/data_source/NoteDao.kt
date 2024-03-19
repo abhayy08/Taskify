@@ -1,10 +1,10 @@
-package com.abhay.taskflow.features.feature_note.data.data_source
+package com.abhay.taskify.features.feature_note.data.data_source
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.abhay.taskflow.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -1,6 +1,7 @@
-package com.abhay.taskflow.features.feature_note.presentation.notes
+package com.abhay.taskify.features.feature_note.presentation.notes
 
-import com.abhay.taskflow.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.model.Note
+
 
 data class NotesState(
     val notes: List<Note> = emptyList()

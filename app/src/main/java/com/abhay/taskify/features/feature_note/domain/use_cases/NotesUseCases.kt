@@ -1,9 +1,9 @@
-package com.abhay.taskflow.features.feature_note.domain.use_case
+package com.abhay.taskify.features.feature_note.domain.use_cases
 
-import com.abhay.taskflow.features.feature_note.domain.use_case.AddNote
-import com.abhay.taskflow.features.feature_note.domain.use_case.DeleteNote
-import com.abhay.taskflow.features.feature_note.domain.use_case.GetNote
-import com.abhay.taskflow.features.feature_note.domain.use_case.GetNotes
+import com.abhay.taskify.features.feature_note.domain.use_cases.AddNote
+import com.abhay.taskify.features.feature_note.domain.use_cases.DeleteNote
+import com.abhay.taskify.features.feature_note.domain.use_cases.GetNote
+import com.abhay.taskify.features.feature_note.domain.use_cases.GetNotes
 
 data class NotesUseCases(
     val getNotes: GetNotes,

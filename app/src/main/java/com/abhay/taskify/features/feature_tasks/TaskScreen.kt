@@ -1,4 +1,8 @@
 package com.abhay.taskify.features.feature_tasks
 
-class TaskScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun TaskScreen() {
+
 }

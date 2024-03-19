@@ -1,4 +1,4 @@
-package com.abhay.taskify.features.feature_main
+package com.abhay.taskify.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

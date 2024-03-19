@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.abhay.taskflow.features.feature_note.presentation.add_edit_notes
+package com.abhay.taskify.features.feature_note.presentation.add_edit_notes_screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.abhay.taskflow.features.feature_note.presentation.components.TransparentTextField
-import com.abhay.taskflow.ui.theme.TaskFlowTheme
+import com.abhay.taskify.features.feature_note.presentation.components.TransparentTextField
+import com.abhay.taskify.ui.theme.TaskifyTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -142,6 +142,7 @@ fun AddEditNotesScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditTopAppBar(
     navController: NavHostController,
@@ -187,7 +188,7 @@ fun AddEditFab(
 @PreviewLightDark
 @Composable
 fun AddEditNoteScreenPreview() {
-    TaskFlowTheme {
+    TaskifyTheme {
 //        AddEditNotesScreen(navController = rememberNavController())
     }
 }

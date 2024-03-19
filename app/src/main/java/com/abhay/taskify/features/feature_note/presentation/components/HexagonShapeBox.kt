@@ -1,4 +1,4 @@
-package com.abhay.taskflow.features.feature_note.presentation.components
+package com.abhay.taskify.features.feature_note.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints

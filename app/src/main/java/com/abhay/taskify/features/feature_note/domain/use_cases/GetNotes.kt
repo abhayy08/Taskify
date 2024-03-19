@@ -1,8 +1,9 @@
-package com.abhay.taskflow.features.feature_note.domain.use_case
+package com.abhay.taskify.features.feature_note.domain.use_cases
 
-import com.abhay.taskflow.features.feature_note.domain.model.Note
-import com.abhay.taskflow.features.feature_note.domain.repository.NoteRepository
+import com.abhay.taskify.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
+
 
 class GetNotes(
     private val repository: NoteRepository

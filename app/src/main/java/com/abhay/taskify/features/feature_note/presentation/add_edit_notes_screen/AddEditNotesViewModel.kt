@@ -1,13 +1,13 @@
-package com.abhay.taskflow.features.feature_note.presentation.add_edit_notes
+package com.abhay.taskify.features.feature_note.presentation.add_edit_notes_screen
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abhay.taskflow.features.feature_note.domain.model.InvalidNoteException
-import com.abhay.taskflow.features.feature_note.domain.model.Note
-import com.abhay.taskflow.features.feature_note.domain.use_case.NotesUseCases
+import com.abhay.taskify.features.feature_note.domain.model.InvalidNoteException
+import com.abhay.taskify.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.use_cases.NotesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -84,9 +84,11 @@ class AddEditNotesViewModel @Inject constructor(
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
                     }catch (e: InvalidNoteException) {
-                        _eventFlow.emit(UiEvent.ShowSnackBar(
-                            message = e.message ?: "Couldn't save note"
-                        ))
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackBar(
+                                message = e.message ?: "Couldn't save note"
+                            )
+                        )
                     }
                 }
             }
@@ -111,7 +113,7 @@ class AddEditNotesViewModel @Inject constructor(
     }
 
     sealed class UiEvent{
-        data class ShowSnackBar(val message: String):UiEvent()
+        data class ShowSnackBar(val message: String): UiEvent()
         object SaveNote: UiEvent()
         object DeleteNote: UiEvent()
     }

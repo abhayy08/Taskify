@@ -1,18 +1,14 @@
-package com.abhay.taskflow.features.feature_note.presentation.notes
+package com.abhay.taskify.features.feature_note.presentation.notes
 
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +36,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.abhay.taskflow.features.feature_main.navgraphs.Graph
-import com.abhay.taskflow.features.feature_note.presentation.components.HexagonShapeBox
-import com.abhay.taskflow.features.feature_note.presentation.navigation.NotesScreens
-import com.abhay.taskflow.ui.theme.TaskFlowTheme
+import com.abhay.taskify.features.feature_note.presentation.components.HexagonShapeBox
+import com.abhay.taskify.features.feature_note.presentation.navigation.NotesScreens
+import com.abhay.taskify.ui.theme.TaskifyTheme
 
 data class Data(
     val title: String, val note: String
@@ -52,9 +46,9 @@ data class Data(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NotesSection(
-    viewModel:  NotesViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
+fun NotesScreen(
+    viewModel: NotesViewModel = hiltViewModel(),
+    navController: NavHostController,
     paddingValues: PaddingValues = PaddingValues(0.dp),
     onFabClick: () -> Unit
 ) {
@@ -81,7 +75,7 @@ fun NotesSection(
                 end = 16.dp
             )
         ) {
-            itemsIndexed(state.notes) { index,note ->
+            itemsIndexed(state.notes) { index, note ->
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = if (index % 2 != 0) Alignment.End else Alignment.Start
@@ -90,7 +84,7 @@ fun NotesSection(
                         modifier = Modifier
                             .fillMaxWidth(0.55f)
                             .height(200.dp)
-                            .clickable{
+                            .clickable {
                                 navController.navigate(NotesScreens.AddEditScreen.route + "?noteId=${note.id}")
                             },
                         noteTitle = note.title,
@@ -153,12 +147,13 @@ fun Fab(
 }
 
 
-@Preview
-@Composable
-fun NotesPreview() {
-    TaskFlowTheme {
-        NotesSection(
-            onFabClick = {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun NotesPreview() {
+//    TaskifyTheme {
+//        NotesScreen(
+//            onFabClick = {}
+//
+//        )
+//    }
+//}

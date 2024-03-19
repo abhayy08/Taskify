@@ -1,8 +1,8 @@
-package com.abhay.taskflow.features.feature_note.data.repository
+package com.abhay.taskify.features.feature_note.data.repository
 
-import com.abhay.taskflow.features.feature_note.data.data_source.NoteDao
-import com.abhay.taskflow.features.feature_note.domain.model.Note
-import com.abhay.taskflow.features.feature_note.domain.repository.NoteRepository
+import com.abhay.taskify.features.feature_note.data.data_source.NoteDao
+import com.abhay.taskify.features.feature_note.domain.model.Note
+import com.abhay.taskify.features.feature_note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
