@@ -3,6 +3,8 @@
 package com.abhay.taskify.features.feature_note.presentation.add_edit_notes_screen
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -73,6 +76,11 @@ fun AddEditNotesScreen(
         }
     }
 
+    BackHandler {
+        viewModel.onEvent(AddEditNoteEvent.SaveNote)
+        navController.navigateUp()
+    }
+
 
     Scaffold(
         snackbarHost = {
@@ -83,6 +91,9 @@ fun AddEditNotesScreen(
                 navController = navController,
                 onDelete = {
                     viewModel.onEvent(AddEditNoteEvent.DeleteNote)
+                },
+                onSave = {
+                         viewModel.onEvent(AddEditNoteEvent.SaveNote)
                 },
                 isDeleteAvailable = isNote
             )
@@ -147,7 +158,8 @@ fun AddEditNotesScreen(
 fun AddEditTopAppBar(
     navController: NavHostController,
     isDeleteAvailable: Boolean,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onSave: () -> Unit
 ) {
     TopAppBar(
         title = {},
@@ -169,6 +181,12 @@ fun AddEditTopAppBar(
                         contentDescription = "Delete Note"
                     )
                 }
+            }
+            IconButton(onClick = onSave) {
+                Icon(
+                    imageVector = Icons.Rounded.Save,
+                    contentDescription = "Delete Note"
+                )
             }
         }
     )

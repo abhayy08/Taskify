@@ -11,10 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.NoteAdd
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.AddAlert
+import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -32,20 +38,23 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.widget.NestedScrollView
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.abhay.taskify.features.feature_main.navgraphs.Graph
 import com.abhay.taskify.features.feature_main.navgraphs.HomeNavGraph
 import com.abhay.taskify.ui.theme.TaskifyTheme
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     val screens = listOf(
         BottomBarScreen.Tasks,
@@ -57,8 +66,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .imePadding()
-            .background(Color.Black),
+            .imePadding(),
         topBar = {
             TopAppBar(
                 navController = navController,
@@ -71,12 +79,56 @@ fun HomeScreen(
                 navController = navController,
                 screens = screens
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                navController,
+                screens
+            )
         }
     ) { paddingValues ->
         HomeNavGraph(
             navController = navController,
             paddingValues = paddingValues
         )
+    }
+}
+
+@Composable
+fun FloatingActionButton(
+    navController: NavHostController,
+    screens: List<BottomBarScreen>
+) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination?.route
+    val isFloatingActionBarvisible = screens.any { it.route == currentDestination }
+
+    if (isFloatingActionBarvisible) {
+        FloatingActionButton(onClick = {
+            when (currentDestination) {
+                BottomBarScreen.Tasks.route -> {
+                    //Todo
+                }
+
+                BottomBarScreen.Notes.route -> {
+                    navController.navigate(route = Graph.NOTES)
+                }
+
+                BottomBarScreen.Reminders.route -> {
+                    //Todo
+                }
+            }
+        }) {
+            Icon(
+                imageVector = when (currentDestination) {
+                    BottomBarScreen.Tasks.route -> Icons.Rounded.AddTask
+                    BottomBarScreen.Notes.route -> Icons.AutoMirrored.Outlined.NoteAdd
+                    BottomBarScreen.Reminders.route -> Icons.Rounded.AddAlert
+                    else -> Icons.Rounded.Add
+                }, contentDescription = "Add"
+            )
+        }
     }
 }
 
@@ -89,9 +141,9 @@ fun TopAppBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route ?: ""
+    val displayTopAppBar = screens.any { it.route == currentDestination }
 
-    val displayTopAppBar = screens.any{it.route == currentDestination}
-        if(displayTopAppBar){
+    if (displayTopAppBar) {
         CenterAlignedTopAppBar(
             title = {
                 Row(
@@ -133,9 +185,9 @@ fun BottomAppBar(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val isBottomBarVisible = screens.any {it.route == currentDestination?.route}
+    val isBottomBarVisible = screens.any { it.route == currentDestination?.route }
 
-    if(isBottomBarVisible){
+    if (isBottomBarVisible) {
         NavigationBar {
             screens.forEach { screen ->
                 NavItem(

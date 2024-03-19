@@ -44,9 +44,6 @@ fun HomeNavGraph(
             NotesScreen(
                 navController = navController,
                 paddingValues = paddingValues,
-                onFabClick = {
-                    navController.navigate(Graph.NOTES)
-                }
             )
         }
         composable(route = BottomBarScreen.Reminders.route) {
