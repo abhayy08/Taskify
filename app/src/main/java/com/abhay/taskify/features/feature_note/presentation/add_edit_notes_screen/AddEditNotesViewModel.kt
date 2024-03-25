@@ -41,7 +41,7 @@ class AddEditNotesViewModel @Inject constructor(
                         isNote = true
                         currentNoteId = note.id
                         _titleState.value = _titleState.value.copy(
-                            text = note.title, isHintVisible = false
+                            text = note.title, isHintVisible = note.title == ""
                         )
                         _contentState.value = _contentState.value.copy(
                             text = note.content, isHintVisible = false

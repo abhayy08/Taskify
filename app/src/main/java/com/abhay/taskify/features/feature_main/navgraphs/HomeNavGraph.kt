@@ -5,11 +5,14 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.abhay.taskify.features.feature_main.BottomBarScreen
-import com.abhay.taskify.features.feature_note.presentation.navigation.noteNavGraph
-import com.abhay.taskify.features.feature_note.presentation.notes.NotesScreen
+import androidx.navigation.navArgument
+import com.abhay.taskify.features.feature_main.FeaturesScreens
+import com.abhay.taskify.features.feature_note.presentation.add_edit_notes_screen.AddEditNotesScreen
+import com.abhay.taskify.features.feature_note.presentation.navigation.NotesScreens
+import com.abhay.taskify.features.feature_note.presentation.notes.NotesUiScreen
 import com.abhay.taskify.features.feature_reminders.ReminderScreen
 import com.abhay.taskify.features.feature_tasks.TaskScreen
 
@@ -20,7 +23,7 @@ fun HomeNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarScreen.Notes.route,
+        startDestination = FeaturesScreens.Notes.route,
         enterTransition = {
             EnterTransition.None
         },
@@ -34,22 +37,27 @@ fun HomeNavGraph(
             ExitTransition.None
         }
     ) {
-        composable(route = BottomBarScreen.Tasks.route) {
+        composable(route = FeaturesScreens.Tasks.route) {
             TaskScreen()
         }
 
-        composable(
-            route = BottomBarScreen.Notes.route
-        ) {
-            NotesScreen(
-                navController = navController,
-                paddingValues = paddingValues,
-            )
+        composable(route = FeaturesScreens.Notes.route) {
+            NotesUiScreen(navController = navController, paddingValues = paddingValues)
         }
-        composable(route = BottomBarScreen.Reminders.route) {
+        composable(route = FeaturesScreens.Reminders.route) {
             ReminderScreen()
         }
-        noteNavGraph(navController = navController)
+        composable(route = NotesScreens.AddEditScreen.route + "?noteId={noteId}",
+            arguments = listOf(navArgument(
+                name = "noteId"
+            ) {
+                type = NavType.IntType
+                defaultValue = -1
+            })) {
+            AddEditNotesScreen(
+                navController = navController,
+            )
+        }
     }
 }
 

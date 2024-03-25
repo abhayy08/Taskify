@@ -1,239 +1,238 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.abhay.taskify.features.feature_main
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.NoteAdd
+import androidx.compose.material.icons.automirrored.rounded.NoteAdd
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AddAlert
 import androidx.compose.material.icons.rounded.AddTask
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material3.DismissibleDrawerSheet
+import androidx.compose.material3.DismissibleNavigationDrawer
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.widget.NestedScrollView
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.abhay.taskify.features.feature_main.navgraphs.Graph
+import com.abhay.taskify.R
 import com.abhay.taskify.features.feature_main.navgraphs.HomeNavGraph
+import com.abhay.taskify.features.feature_note.presentation.navigation.NotesScreens
 import com.abhay.taskify.ui.theme.TaskifyTheme
+import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberNavController()
 ) {
-    val screens = listOf(
-        BottomBarScreen.Tasks,
-        BottomBarScreen.Notes,
-        BottomBarScreen.Reminders,
-    )
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .imePadding(),
-        topBar = {
-            TopAppBar(
-                navController = navController,
-                scrollBehavior = scrollBehavior,
-                screens
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                navController = navController,
-                screens = screens
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                navController,
-                screens
-            )
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.primary
+    ) {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+        var selectedItemIndex by rememberSaveable {
+            mutableIntStateOf(0)
         }
-    ) { paddingValues ->
-        HomeNavGraph(
-            navController = navController,
-            paddingValues = paddingValues
+
+        val screens = listOf(
+            FeaturesScreens.Notes, FeaturesScreens.Tasks, FeaturesScreens.Reminders
         )
+
+        DismissibleNavigationDrawer(
+            drawerContent = {
+                NavigationDrawerContent(
+                    selectedItem = selectedItemIndex, onClick = { index, route ->
+                        selectedItemIndex = index
+                        scope.launch {
+                            drawerState.close()
+                        }
+                        navController.navigate(
+                            route = route,
+                        ) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+
+                    }, screens = screens
+                )
+            }, drawerState = drawerState
+        ) {
+            Scaffold(
+                topBar = {
+                    HomeScreenAppBar(onMenuClick = {
+                        scope.launch { drawerState.open() }
+                    })
+                },
+                floatingActionButton = {
+                    HomeScreenFloatingActionButton(screens = screens, navController)
+                }
+            ) {
+                HomeNavGraph(navController = navController, paddingValues = it)
+            }
+        }
     }
 }
 
 @Composable
-fun FloatingActionButton(
-    navController: NavHostController,
-    screens: List<BottomBarScreen>
+fun HomeScreenFloatingActionButton(
+    screens: List<FeaturesScreens>, navController: NavHostController
 ) {
+    val currentRoute by navController.currentBackStackEntryAsState()
+    val currentDestination = currentRoute?.destination
+    val currentScreen = screens.find { it.route == currentDestination?.route }
+    val isFabVisible = screens.any { it.route == currentDestination?.route }
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route
-    val isFloatingActionBarvisible = screens.any { it.route == currentDestination }
-
-    if (isFloatingActionBarvisible) {
+    if (isFabVisible) {
         FloatingActionButton(onClick = {
-            when (currentDestination) {
-                BottomBarScreen.Tasks.route -> {
-                    //Todo
+            when (currentScreen) {
+                FeaturesScreens.Notes -> {
+                    navController.navigate(NotesScreens.AddEditScreen.route)
                 }
-
-                BottomBarScreen.Notes.route -> {
-                    navController.navigate(route = Graph.NOTES)
-                }
-
-                BottomBarScreen.Reminders.route -> {
-                    //Todo
-                }
+                FeaturesScreens.Reminders -> {}
+                FeaturesScreens.Tasks -> {}
+                null -> {}
             }
         }) {
-            Icon(
-                imageVector = when (currentDestination) {
-                    BottomBarScreen.Tasks.route -> Icons.Rounded.AddTask
-                    BottomBarScreen.Notes.route -> Icons.AutoMirrored.Outlined.NoteAdd
-                    BottomBarScreen.Reminders.route -> Icons.Rounded.AddAlert
-                    else -> Icons.Rounded.Add
-                }, contentDescription = "Add"
+            when (currentScreen) {
+                FeaturesScreens.Notes -> {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.NoteAdd,
+                        contentDescription = "Add Note"
+                    )
+                }
+                FeaturesScreens.Reminders -> {
+                    Icon(
+                        imageVector = Icons.Rounded.AddAlert, contentDescription = "Add a reminder"
+                    )
+                }
+                FeaturesScreens.Tasks -> {
+                    Icon(imageVector = Icons.Rounded.AddTask, contentDescription = "Add a task")
+                }
+                null -> {
+                    Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun NavigationDrawerContent(
+    modifier: Modifier = Modifier,
+    selectedItem: Int,
+    onClick: (Int, String) -> Unit = { _, _ -> },
+    screens: List<FeaturesScreens>,
+) {
+    DismissibleDrawerSheet {
+        Spacer(modifier = Modifier.height(16.dp))
+        screens.forEachIndexed { index, screen ->
+            NavigationDrawerItem(
+                modifier = modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                label = {
+                    Text(text = screen.title)
+                },
+                selected = index == selectedItem,
+                onClick = { onClick(index, screen.route) },
+                icon = {
+                    Icon(imageVector = screen.icon, contentDescription = screen.title)
+                }
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .align(Alignment.CenterHorizontally),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.3f)
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(
-    navController: NavHostController,
-    scrollBehavior: TopAppBarScrollBehavior,
-    screens: List<BottomBarScreen>
+fun HomeScreenAppBar(
+    onMenuClick: () -> Unit = {},
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: ""
-    val displayTopAppBar = screens.any { it.route == currentDestination }
-
-    if (displayTopAppBar) {
-        CenterAlignedTopAppBar(
-            title = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(0.8f)
-                        )
-                    ) {
-                        Text(
-                            text = currentDestination, modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent
-            ),
-            scrollBehavior = scrollBehavior
-        )
-    }
-}
-
-
-@Composable
-fun BottomAppBar(
-    navController: NavHostController,
-    screens: List<BottomBarScreen>
-) {
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val isBottomBarVisible = screens.any { it.route == currentDestination?.route }
-
-    if (isBottomBarVisible) {
-        NavigationBar {
-            screens.forEach { screen ->
-                NavItem(
-                    screen = screen,
-                    currentDestination = currentDestination,
-                    navController = navController
+    val context = LocalContext.current
+    TopAppBar(
+        title = {
+            Text(text = "Taskify")
+        },
+        navigationIcon = {
+            IconButton(onClick = onMenuClick) {
+                Icon(imageVector = Icons.Rounded.Menu, contentDescription = null)
+            }
+        },
+        actions = {
+            IconButton(onClick = {
+                Toast.makeText(context,"You tapped your profile", Toast.LENGTH_SHORT)
+                    .show()
+            }) {
+                Image(
+                    painter = painterResource(id = R.drawable.profilephoto),
+                    contentDescription = "Profile",
+                    modifier = Modifier.border(
+                        BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.primary
+                        ),
+                        shape = CircleShape
+                    )
+                        .clip(CircleShape)
                 )
             }
         }
-    }
-}
-
-
-@Composable
-fun RowScope.NavItem(
-    screen: BottomBarScreen,
-    currentDestination: NavDestination?,
-    navController: NavHostController
-) {
-    NavigationBarItem(
-        label = {
-            Text(text = screen.title)
-        },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
-        onClick = {
-            navController.navigate(screen.route) {
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
-            }
-        },
-        icon = {
-            Icon(
-                imageVector = screen.icon,
-                contentDescription = screen.title
-            )
-        }
     )
+
 }
 
-@Preview
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
 @Composable
-fun MainPreview() {
+private fun HomePreview() {
     TaskifyTheme {
-//        HomeScreen()
+        HomeScreen()
     }
-
 }
+

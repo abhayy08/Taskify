@@ -7,8 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.navigation.compose.rememberNavController
-import com.abhay.taskify.features.feature_main.navgraphs.RootNavGraph
 import com.abhay.taskify.ui.theme.TaskifyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,14 +17,13 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
-                scrim = Color.Gray.copy(alpha = 0.2f).toArgb(),
-                darkScrim = Color.DarkGray.copy(alpha = 0.2f).toArgb()
+                scrim = Color.Transparent.toArgb(),
+                darkScrim = Color.Transparent.toArgb()
             )
         )
         setContent {
             TaskifyTheme {
-                val rootNavController = rememberNavController()
-                RootNavGraph(navHostController = rootNavController)
+                HomeScreen()
             }
         }
     }

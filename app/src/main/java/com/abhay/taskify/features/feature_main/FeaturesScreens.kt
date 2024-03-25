@@ -6,24 +6,24 @@ import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material.icons.rounded.NotificationAdd
 import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class BottomBarScreen(
+sealed class FeaturesScreens(
     val route: String,
     val title: String,
     val icon: ImageVector
 ) {
-    data object Tasks : BottomBarScreen(
+    data object Tasks : FeaturesScreens(
         route = "TASKS",
         title = "Tasks",
         icon = Icons.Rounded.AddTask
     )
 
-    data object Notes : BottomBarScreen(
+    data object Notes : FeaturesScreens(
         route = "NOTES",
         title = "Notes",
         icon = Icons.Outlined.EditNote
     )
 
-    data object Reminders : BottomBarScreen(
+    data object Reminders : FeaturesScreens(
         route = "REMINDERS",
         title = "Reminders",
         icon = Icons.Rounded.NotificationAdd
