@@ -46,7 +46,7 @@ fun NotesUiScreen(
         modifier = Modifier.fillMaxSize(),
         columns = StaggeredGridCells.Adaptive(156.dp),
         contentPadding = PaddingValues(
-            top = paddingValues.calculateTopPadding(),
+            top = paddingValues.calculateTopPadding() + 8.dp,
             start = paddingValues.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
             end = paddingValues.calculateEndPadding(LayoutDirection.Ltr) + 16.dp,
             bottom = paddingValues.calculateBottomPadding() + 10.dp
@@ -77,8 +77,8 @@ fun NoteItem(
             .wrapContentHeight()
             .padding(4.dp),
         shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(0.3f)),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary.copy(0.1f))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(0.5f)),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary.copy(0.07f))
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

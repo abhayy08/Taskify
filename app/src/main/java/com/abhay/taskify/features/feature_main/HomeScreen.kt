@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NoteAdd
 import androidx.compose.material.icons.rounded.Add
@@ -29,9 +30,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +47,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -55,6 +61,7 @@ import com.abhay.taskify.features.feature_main.navgraphs.HomeNavGraph
 import com.abhay.taskify.features.feature_note.presentation.navigation.NotesScreens
 import com.abhay.taskify.ui.theme.TaskifyTheme
 import kotlinx.coroutines.launch
+import java.text.Format
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -63,7 +70,7 @@ fun HomeScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.primary
+//        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -161,11 +168,17 @@ fun NavigationDrawerContent(
     onClick: (Int, String) -> Unit = { _, _ -> },
     screens: List<FeaturesScreens>,
 ) {
-    DismissibleDrawerSheet {
+    DismissibleDrawerSheet(
+        drawerShape = RoundedCornerShape(24.dp),
+        drawerTonalElevation = 0.9.dp
+    ) {
+        Text(text = "Taskify", style = MaterialTheme.typography.headlineMedium,modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp, start = 24.dp, bottom = 8.dp))
         Spacer(modifier = Modifier.height(16.dp))
         screens.forEachIndexed { index, screen ->
             NavigationDrawerItem(
-                modifier = modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                modifier = modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                 label = {
                     Text(text = screen.title)
                 },
@@ -173,13 +186,13 @@ fun NavigationDrawerContent(
                 onClick = { onClick(index, screen.route) },
                 icon = {
                     Icon(imageVector = screen.icon, contentDescription = screen.title)
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Divider(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth(0.7f)
                 .align(Alignment.CenterHorizontally),
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.onBackground.copy(0.3f)
@@ -195,7 +208,7 @@ fun HomeScreenAppBar(
     val context = LocalContext.current
     TopAppBar(
         title = {
-            Text(text = "Taskify")
+            Text(text = "Welcome To Taskify")
         },
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
@@ -210,17 +223,18 @@ fun HomeScreenAppBar(
                 Image(
                     painter = painterResource(id = R.drawable.profilephoto),
                     contentDescription = "Profile",
-                    modifier = Modifier.border(
-                        BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.primary
-                        ),
-                        shape = CircleShape
-                    )
+                    modifier = Modifier
+                        .border(
+                            BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.primary
+                            ),
+                            shape = CircleShape
+                        )
                         .clip(CircleShape)
                 )
             }
-        }
+        },
     )
 
 }
